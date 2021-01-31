@@ -1,32 +1,74 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <Header v-bind:class="{ 'd-none': $route.path == '/' }"/>
+    <div class="container">
+      <router-view/>
     </div>
-    <router-view/>
   </div>
 </template>
+<script>
+import Header from "./components/layout/Header";
+import { mapMutations }  from 'vuex'            
+export default {
+  components: {
+    Header
+  },
+  methods: {
+...mapMutations(['setUser','setReciep']),      
+  },
+  mounted() {
+    this.setUser(this.$store.getters.getUsers);
+    this.setReciep(this.$store.getters.getRecieps);
+  }
+}
+</script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.error{
+     background-color: #ffc0c6;
+    border-radius: 4px;
+    margin: 16px 0;
+    padding: 16px 24px;
+    font-size: 1em;
+    border-width: 0 5px;
+    border-style: solid;
+    border-color: #c10015;
+    letter-spacing: 0.5px;
+}
+.d-none{
+  display: none  !important;
+}
+.row{
+  width: 100%;
+}
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  /* for edge cases: */
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#nav {
-  padding: 30px;
+@media (min-width: 768px) {
+  .container{
+    width: 750px;
+  }
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+@media (min-width: 992px) {
+  .container{
+    width: 970px;
+  }
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+@media (min-width: 1200px) {
+  .container{
+    width: 1170px;
+  }
 }
 </style>
