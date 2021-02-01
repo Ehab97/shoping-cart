@@ -70,7 +70,6 @@ export default new Vuex.Store({
         localStorage.setItem('cart', JSON.stringify(state.cart));
         
       },
-      // totalCart:(state)=> state.cart.reduce((a, b) => a.counter + b.counter, 0)
     },
   actions: {
   },

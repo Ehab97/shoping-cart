@@ -48,7 +48,7 @@ export default {
           signIn(e) {
                // e.preventDefault();
                if (this.password < 8) {
-                    this.msg='password < 8';
+                    this.msg='password < 8'; 
                     this.bool = true;
                } else if (!this.validEmail(this.email)) {
                     this.msg='mail not valid';

@@ -5,6 +5,10 @@
       <q-img :src="receip.imageUrl">
         <div class="absolute-bottom">
           <div class="text-h6">{{receip.name}}</div>
+          <p>{{receip.descrption}}</p>
+          <ul>
+            <li v-for="item in receip.option" :key="item">{{item}}</li>
+          </ul>
         </div>
       </q-img>
 
@@ -56,5 +60,22 @@ computed:{...mapGetters(['getRecieps'])}
 .q-card a{
   text-decoration: none;
   color:#000;
+}
+.absolute-bottom{
+   transition: height 1s;
+   height: 25%;
+}
+.absolute-bottom p,.absolute-bottom ul{
+  padding: 0;
+  display: none;
+}
+.absolute-bottom ul li{
+  list-style: none;
+}
+.absolute-full:hover .absolute-bottom{
+height: 80%;
+}
+.absolute-full:hover .absolute-bottom p ,.absolute-bottom ul{
+  display: block;
 }
 </style>
