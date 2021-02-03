@@ -14,11 +14,11 @@ export default {
     Header
   },
   methods: {
-...mapMutations(['setUser','setReciep']),      
+...mapMutations(['setUser']),      
   },
   mounted() {
     this.setUser(this.$store.getters.getUsers);
-    this.setReciep(this.$store.getters.getRecieps);
+
   }
 }
 </script>

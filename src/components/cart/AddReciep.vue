@@ -1,20 +1,20 @@
-<template > 
+<template>
      <div class="row justify-center">
           <div class="col-12 parent">
-               <div class="q-pa-md">
+               <div class="contain">
                     <form>
-                         <div class="q-gutter-md" style="max-width: 300px">
-                              <h3>Add Reciep</h3>
+                         <div class="q-gutter-md">
+                              <h5 class="text-center">Add Reciep</h5>
                               <q-input filled type="text" v-model="name" label="name" />
                               <q-input filled type="text" v-model="imageUrl" label="image url" />
                               <q-input filled type="text" v-model="descrption" label="descrption" />
-                              <div class="q-pa-lg">
-                                   <h5>Grediants</h5>
-                                   <q-option-group v-model="option" :options="options" color="green" type="checkbox" />
+                              <label>Grediants:</label>
+                              <q-input type="text" v-model="temp" @keyup="addOption" :required="bool" />
+                              <div v-for="(item,index) in option" :key="index" class="pill text-center">
+                                   <span @click="deleteSkill(index)">{{ item }}</span>
                               </div>
                               <div class="text-center">
-                                   <q-btn label="Add" type="submit" 
-                                   color="dark" @click="onSubmit" />
+                                   <q-btn label="Add" color="dark" @click="onSubmit" />
                               </div>
                          </div>
                     </form>
@@ -36,29 +36,35 @@ export default {
                descrption: '',
                option: [],
                id: '',
-               options: [{
-                         label: 'Option 1',
-                         value: 'op1'
-                    },
-                    {
-                         label: 'Option 2',
-                         value: 'op2'
-                    },
-                    {
-                         label: 'Option 3',
-                         value: 'op3'
-                    }
-               ],
                error: false,
-               msg: ''
+               msg: '',
+               temp:'',
+               bool:true
           }
 
      },
      methods: {
-          ...mapMutations(['addReciep', 'setReciep']),
+          ...mapMutations(['addReciep']),
+           addOption(e){
+                  if (e.keyCode === 13 && this.temp) {
+                     if (!this.option.includes(this.temp)) {
+                          this.option.push(this.temp);
+                          this.temp = '';
+                     }
+                     this.temp = '';
+                }
+         
+          },
+            deleteSkill(id){
+               this.option= this.option.filter(e=>e!=id);
+          },
           onSubmit(e) {
                e.preventDefault();
-               if (this.name === '') {
+                /*requerd skills*/
+             if(this.option.length>0){
+                  this.bool=false
+             }
+           if (this.name === '') {
                     this.msg = 'Enter The name';
                     this.error = true;
                } else if (this.imageUrl === '') {
@@ -80,8 +86,8 @@ export default {
                          id: parseInt(new Date().getTime().toString().concat(performance.now()), 10)
                     };
                     this.addReciep(reciep);
-                    this.setReciep(reciep);
-                    this.$router.push('/home');
+                    // this.setReciep(reciep);
+                    this.$router.push('/home').catch(()=>{});;
 
                }
           }
@@ -89,11 +95,68 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .parent{
      display: flex;
      justify-content: center;
      align-items: center;
 }
-
+ label {
+    color: #000;
+    display: inline-block;
+    margin: 25px 0 15px;
+    font-size: .8em;
+    /* text-transform: uppercase; */
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+  input, select {
+    display: block;
+    padding: 10px 6px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    color: #555;
+  }
+  input[type="checkbox"] {
+    display: inline-block;
+    width: 16px;
+    margin: 0 10px 0 0;
+    position: relative;
+    top: 2px;
+  }
+   .pill {
+    display: inline-block;
+    margin: 20px 10px 0 0;
+    padding: 6px 12px;
+    background: #eee;
+    border-radius: 20px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    color: #777;
+    cursor: pointer;
+  }
+  .pill:hover{
+       background: #ffc0c6;
+       color:#000;
+  }
+  
+  .contain{
+       width: 100%;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       padding: 25px 0;
+       flex-direction: column;
+  }
+  form{
+       max-width: 650px;
+  }
+@media (max-width:600px) {
+  form{
+       width: 90%;
+  }
+}
 </style>

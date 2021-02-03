@@ -1,44 +1,40 @@
 <template>
-<div class="row justify-center">
-  <div class="col-12 col-md-4" v-for="(receip,index) in getRecieps" :key="index">
-    <q-card class="my-card">
-      <q-img :src="receip.imageUrl">
-        <div class="absolute-bottom">
-          <div class="text-h6">{{receip.name}}</div>
-          <p>{{receip.descrption}}</p>
-          <ul>
-            <li v-for="item in receip.option" :key="item">{{item}}</li>
-          </ul>
-        </div>
-      </q-img>
+  <q-card class="my-card">
+    <q-img :src="receip.imageUrl">
+      <div class="absolute-bottom">
+        <div class="text-h6">{{receip.name}}</div>
+        <p>{{receip.descrption}}</p>
+        <ul>
+          <li v-for="item in receip.option" :key="item">{{item}}</li>
+        </ul>
+      </div>
+    </q-img>
 
-      <q-card-actions class="justify-center">
-        <q-btn @click="addToCart(receip)" flat>
-          <font-awesome-icon icon="plus" />
-        </q-btn>
-        <q-btn flat>
-          <router-link :to="{name:'edit-reciep',params:{id:receip.id}}">
-            <font-awesome-icon icon="pencil-alt" />
-          </router-link>
-        </q-btn>
-        <q-btn @click="deleteReciep(receip.id)" flat>
-          <font-awesome-icon icon="trash-alt" />
-        </q-btn>
-      </q-card-actions>
-    </q-card>
-  </div>
-</div>
+    <q-card-actions class="justify-center">
+      <q-btn @click="addToCart(receip)" flat>
+        <font-awesome-icon icon="plus" />
+      </q-btn>
+      <q-btn flat>
+        <router-link :to="{name:'edit-reciep',params:{id:receip.id}}">
+          <font-awesome-icon icon="pencil-alt" />
+        </router-link>
+      </q-btn>
+      <q-btn @click="deleteReciep(receip.id)" flat>
+        <font-awesome-icon icon="trash-alt" />
+      </q-btn>
+    </q-card-actions>
+  </q-card>
 </template>
 
 <script>
 import { mapGetters,mapMutations } from 'vuex'  
 export default {
-// props:['receip'],
+props:['receip'],
 methods:{
   ...mapMutations(['addToCart']),
   deleteReciep(id){
     this.$store.commit("deleteReciep", id);
-    this.$router.push("/home");
+    // this.$router.push("/home");
   }
 },
 computed:{...mapGetters(['getRecieps'])}

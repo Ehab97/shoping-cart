@@ -18,26 +18,42 @@ export default new Vuex.Store({
     ]
   },
   getters:{
-    getUsers:  (state) => state.users,
-    getRecieps:(state) => state.recieps,
-    getReciep: (state) => (id) =>  state.recieps.find(reciep => reciep.id === id),
+    getUsers:(state) => state.users,
+    getRecieps:(state) => {
+      state.recieps
+      let recieps = JSON.parse(localStorage.getItem('recieps'))
+      return recieps
+    },
+    getReciep:state=>(id) =>  {
+      let recieps=JSON.parse(localStorage.getItem('recieps'));
+      state.recieps=null;
+      state.recieps=JSON.parse(localStorage.getItem('recieps'));
+      return recieps.find(reciep => reciep.id === id);
+    },
     getAllcart:(state) => state.cart,
     totalCart:(state)=> state.cart.reduce((a, b) =>  a + b.counter, 0)
   },
   mutations: {
     setUser:(state)=>localStorage.setItem('users', JSON.stringify(state.users)),
     addUser:(state, user) =>state.users.push(user),
-    addReciep:(state,receip)=>state.recieps.push(receip),
-    setReciep:(state)=>localStorage.setItem('recieps', JSON.stringify(state.recieps)),
+    addReciep:(state,receip)=>{
+      (state.recieps.push(receip),
+      localStorage.removeItem('recieps'),
+      localStorage.setItem('recieps', JSON.stringify(state.recieps)))
+    },
     deleteReciep:(state,id)=>{
       state.recieps= state.recieps.filter(recep=>recep.id!==id),
+      localStorage.removeItem('recieps'),
       localStorage.setItem('recieps', JSON.stringify(state.recieps))
     },
     editReciep: (state, payload) => {
-        state.recieps.find(receip => receip.id === payload.id)
-        let objIndex = state.recieps.findIndex((obj => obj.id == payload.id));
+        let recieps = JSON.parse(localStorage.getItem('recieps'))
+        recieps.find(receip => receip.id === payload.id)
+        let objIndex = recieps.findIndex((obj => obj.id == payload.id));
         state.recieps[objIndex] = payload.recieps;
-        localStorage.setItem('recieps', JSON.stringify(state.recieps));
+        recieps[objIndex] = payload.recieps;
+        localStorage.removeItem('recieps');
+        localStorage.setItem('recieps', JSON.stringify(recieps));
       },
       addToCart: (state, payload) => {
         const found = state.cart.some(el => el.id === payload.id);
@@ -45,6 +61,7 @@ export default new Vuex.Store({
           state.cart.push({
             id: payload.id,
             name: payload.name,
+            userId:1,
             counter: 1
           });
           localStorage.setItem('cart', JSON.stringify(state.cart));
