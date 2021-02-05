@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header v-bind:class="{ 'd-none': $route.path == '/' }"/>
+    <Header v-if="$route.path !== '/'"/>
     <div class="container">
       <router-view/>
     </div>

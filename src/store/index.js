@@ -15,7 +15,8 @@ export default new Vuex.Store({
     ],
     cart:[
       
-    ]
+    ],
+    auth:false
   },
   getters:{
     getUsers:(state) => state.users,
@@ -68,24 +69,29 @@ export default new Vuex.Store({
         } else {
           let index = state.cart.findIndex(item => item.id === payload.id)
           state.cart[index].counter++;
+          localStorage.removeItem('cart');
           localStorage.setItem('cart', JSON.stringify(state.cart))
         }
       },
       deleteCart:(state,id)=>{
         state.cart= state.cart.filter(item=>item.id!==id),
+        localStorage.removeItem('cart');
         localStorage.setItem('cart', JSON.stringify(state.cart))    
       },
       raiseQuantity: (state, id) => {
         let index = state.cart.findIndex(item => item.id === id);
         state.cart[index].counter++;
+        localStorage.removeItem('cart');
         localStorage.setItem('cart', JSON.stringify(state.cart));
         
       }, 
       lowQuantity: (state, id) => {
         let index = state.cart.findIndex(item => item.id === id);
-        state.cart[index].counter--;
-        localStorage.setItem('cart', JSON.stringify(state.cart));
-        
+        if(state.cart[index].counter >0){state.cart[index].counter--}
+        else{state.cart=state.cart.filter(item=>item.id!==id);}
+       
+        localStorage.removeItem('cart');
+        localStorage.setItem('cart', JSON.stringify(state.cart));   
       },
     },
   actions: {

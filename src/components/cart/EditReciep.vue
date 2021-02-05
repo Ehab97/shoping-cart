@@ -8,8 +8,9 @@
                               <q-input filled v-model="name" @input="reciep.name" label="name" />
                               <q-input filled v-model="imageUrl" @input="reciep.imageUrl" label="image url" />
                               <q-input filled v-model="descrption" @input="reciep.descrption" label="descrption" />
-                              <label>Grediants:</label>
-                              <q-input type="text" v-model="temp" @keyup="addOption" :required="bool" />
+                              <label>Ingredients:</label>
+                              <span class="clarification">press Enter <font-awesome-icon icon="keyboard" />  after each Ingredient you enter,Don't repeate the type please.</span>
+                              <q-input class="gred" type="text" v-model="temp" @keyup="addOption" :required="bool" />
                               <div v-for="(item,index) in option" :key="index" class="pill text-center">
                                    <span  @mouseover="showByIndex=index" 
                                           @mouseleave="showByIndex=false"
@@ -18,7 +19,7 @@
                                    </span>
                               </div>
                               <div class="text-center">
-                                   <q-btn label="Add" color="dark" @click="onSubmit" />
+                                   <q-btn label="Save" color="dark" @click="onSubmit" />
                               </div>
                          </div>
                     </form>
@@ -75,13 +76,13 @@ export default {
                  if (this.option.length > 0) {
                       this.bool = false
                  }
+                 if (this.imageUrl === '') {
+                    this.imageUrl='https://picsum.photos/id/225/1500/979';
+               } 
                  if (this.name === '') {
                       this.msg = 'Enter The name';
                       this.error = true;
-                 } else if (this.imageUrl === '') {
-                      this.msg = 'Enter The iamge';
-                      this.error = true;
-                 } else if (this.descrption === '') {
+                 }  else if (this.descrption === '') {
                       this.msg = 'Enter The descrption';
                       this.error = true;
                  } else if (this.option.length === 0) {
@@ -177,6 +178,21 @@ export default {
   }
   form{
        max-width: 650px;
+  }
+  .q-btn{
+           margin-top: 50px;
+  }
+  .clarification{
+     display: block;
+    margin: 0;
+    margin-bottom: -10px;
+    color: #000;
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+  .gred{
+       background: rgba(0,0,0,0.05);
+       border-radius: 4px 4px 0 0;
   }
 @media (max-width:600px) {
   form{

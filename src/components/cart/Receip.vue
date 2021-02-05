@@ -11,15 +11,24 @@
     </q-img>
 
     <q-card-actions class="justify-center">
-      <q-btn @click="addToCart(receip)" flat>
+      <q-btn v-if="!show" @click="login"  flat>
+        <font-awesome-icon icon="plus" />
+      </q-btn>
+       <q-btn v-if="show" @click="addToCart(receip)" flat>
         <font-awesome-icon icon="plus" />
       </q-btn>
       <q-btn flat>
-        <router-link :to="{name:'edit-reciep',params:{id:receip.id}}">
+        <router-link v-if="!show" @click.native="login" :to="{name:'edit-reciep',params:{id:receip.id}}">
+          <font-awesome-icon icon="pencil-alt" />
+        </router-link>
+        <router-link v-if="show" :to="{name:'edit-reciep',params:{id:receip.id}}">
           <font-awesome-icon icon="pencil-alt" />
         </router-link>
       </q-btn>
-      <q-btn @click="deleteReciep(receip.id)" flat>
+      <q-btn v-if="!show" @click="login" flat>
+        <font-awesome-icon icon="trash-alt" />
+      </q-btn>
+        <q-btn v-if="show" @click="deleteReciep(receip.id)" flat>
         <font-awesome-icon icon="trash-alt" />
       </q-btn>
     </q-card-actions>
@@ -30,14 +39,27 @@
 import { mapGetters,mapMutations } from 'vuex'  
 export default {
 props:['receip'],
+data(){
+  return{
+    show:null
+  }
+},
 methods:{
   ...mapMutations(['addToCart']),
   deleteReciep(id){
     this.$store.commit("deleteReciep", id);
     // this.$router.push("/home");
+  },login(){
+    let v=confirm('you need to login/sign up to full access servcie create update delete modify and so on');
+    if (v) {
+      this.$router.push("/");
+    }
   }
 },
-computed:{...mapGetters(['getRecieps'])}
+computed:{...mapGetters(['getRecieps'])}, 
+created(){
+          this.show=this.$store.state.auth;
+     }
 }
 </script>
 

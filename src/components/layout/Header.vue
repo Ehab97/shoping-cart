@@ -6,20 +6,23 @@
                </router-link>
                <q-space />
                <q-tabs v-model="tab" shrink stretch>
-                     <router-link to="/cart">
+                     <router-link to="/cart" v-if="show">
                         <font-awesome-icon icon="shopping-cart"/>
                     </router-link>
-                     <span style="margin-left:5px">
+                     <span style="margin-left:5px" v-if="show">
                           {{this.$store.getters.totalCart}}
                      </span>
-                    <router-link to="/cart">
+                    <router-link to="/cart" v-if="show">
                          <q-tab name="tab2" label="Cart"/>
                     </router-link>
-                    <router-link to="/add-receip">
+                    <router-link to="/add-receip" v-if="show">
                          <q-tab name="tab3" label="add new reciep" />
                     </router-link>
-                    <router-link to="/">
+                    <router-link v-if="show" to="/" @click.native="logout">
                          <q-tab name="tab4" label="logout" />
+                    </router-link>
+                    <router-link to="/" v-if="!show">
+                         <q-tab name="tab4" label="login/signup" />
                     </router-link>
                </q-tabs>
 
@@ -28,16 +31,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
      data(){
           return{
-               tab:''
+               tab:'',
+               show:null
           }
      },
-     // methods:{...mapMutations(['totalCart'])}
+     methods:{
+          logout(){
+               this.$store.state.auth=false;
+          }
+     },
      created(){
-          // ...mapGetters(['totalCart']),
+          this.show=this.$store.state.auth;
      }
 }
 </script>

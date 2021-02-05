@@ -35,11 +35,12 @@ export default {
                password: null,
                accept: false,
                bool: false,
-               msg:''
+               msg: '',
+               userId:null
           }
      },
      methods: {
-          ...mapMutations(['addUser','setUser']),
+          ...mapMutations(['addUser', 'setUser']),
           onReset() {
                this.password = null
                this.email = null
@@ -48,44 +49,54 @@ export default {
           signIn(e) {
                // e.preventDefault();
                if (this.password < 8) {
-                    this.msg='password < 8'; 
+                    this.msg = 'password < 8';
                     this.bool = true;
                } else if (!this.validEmail(this.email)) {
-                    this.msg='mail not valid';
+                    this.msg = 'mail not valid ';
                     this.bool = true;
-               } else if(!this.isExistUser(this.email)){
-                    this.msg='user is not exist';
+               } else if (!this.isExistUser(this.email)) {
+                    this.msg = 'user is not exist';
                     this.bool = true;
-               }
-               else{
+               } else {
+               //      if (this.isExistUser(this.email)) {
+               //      if(!this.checkPassword(this.password,this.userId)){
+               //           this.msg = 'password is wrong ';
+               //           this.bool = true;
+               //      }    
+               // }
+                    this.$store.state.auth=true;
                     this.$router.push('/home')
                }
                // console.log(this.msg)
-               
+
           },
           signUp(e) {
                //  e.preventDefault();
                if (this.password < 8) {
-                     this.msg='password < 8';
+                    this.msg = 'password < 8';
                     this.bool = true;
                } else if (!this.validEmail(this.email)) {
-                    this.msg='mail not valid';
+                    this.msg = 'mail not valid';
                     this.bool = true;
-               } else if(this.isExistUser(this.email)){
-                    this.msg='user is exist';
+               } else if (this.isExistUser(this.email)) {
+                    this.msg = 'user is exist';
                     this.bool = true;
-               }else if(!this.accept){
-                    this.msg='you should accept agreement';
+               } else if (!this.accept) {
+                    this.msg = 'you should accept agreement';
                     this.bool = true;
-               }
-               else{
-                    let user={email:this.email,password:this.password,id: parseInt(
-        new Date().getTime().toString().concat(performance.now()),
-        10
-      )};
+               } else {
+                    let user = {
+                         email: this.email,
+                         password: this.password,
+                         id: parseInt(
+                              new Date().getTime().toString().concat(performance.now()),
+                              10
+                         )
+                    };
                     this.addUser(user);
-                    this.serUser(user);
-                    this.$router.push('/home')
+                    this.setUser(user);
+                    this.$store.state.auth=true;
+                    this.$router.push('/home');
                }
                // console.log(this.msg)
           },
@@ -96,13 +107,20 @@ export default {
           isExistUser(mail) {
                for (let i = 0; i < this.$store.getters.getUsers.length; i++) {
                     if (this.$store.getters.getUsers[i].email === mail) {
-                         return true;
+                        this.userId=this.$store.getters.getUsers[i].id;
+                        return true;
                     }
                }
                return false;
+          },checkPassword(password,id){
+               let temp= this.$store.getters.getUsers.filter(x => x.id === id)
+               let pass=temp.password;
+               if(pass===password) return true;
+               else return false;
           }
      },
-     }
+
+}
 </script>
 
 <style>

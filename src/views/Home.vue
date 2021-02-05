@@ -15,13 +15,7 @@ export default {
   name: 'Home',
   components: {
     Recieps,
-  },
-  data () {
-    return {
-     
-    }
   }
-
 }
 </script>
 <style scoped>

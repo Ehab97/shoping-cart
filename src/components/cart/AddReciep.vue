@@ -8,8 +8,9 @@
                               <q-input filled type="text" v-model="name" label="name" />
                               <q-input filled type="text" v-model="imageUrl" label="image url" />
                               <q-input filled type="text" v-model="descrption" label="descrption" />
-                              <label>Grediants:</label>
-                              <q-input type="text" v-model="temp" @keyup="addOption" :required="bool" />
+                              <label>Ingredients:</label>
+                              <span class="clarification">press Enter <font-awesome-icon icon="keyboard" />  after each Ingredient you enter,Don't repeate the type please.</span>
+                              <q-input class="gred" type="text" v-model="temp" @keyup="addOption" :required="bool" />
                               <div v-for="(item,index) in option" :key="index" class="pill text-center">
                                    <span @click="deleteSkill(index)">{{ item }}</span>
                               </div>
@@ -60,15 +61,15 @@ export default {
           },
           onSubmit(e) {
                e.preventDefault();
-                /*requerd skills*/
-             if(this.option.length>0){
-                  this.bool=false
-             }
-           if (this.name === '') {
+               /*requerd skills*/
+               if (this.option.length > 0) {
+                    this.bool = false
+               }
+               if (this.imageUrl === '') {
+                    this.imageUrl = 'https://picsum.photos/id/225/1500/979';
+               }
+               if (this.name === '') {
                     this.msg = 'Enter The name';
-                    this.error = true;
-               } else if (this.imageUrl === '') {
-                    this.msg = 'Enter The iamge';
                     this.error = true;
                } else if (this.descrption === '') {
                     this.msg = 'Enter The descrption';
@@ -87,12 +88,12 @@ export default {
                     };
                     this.addReciep(reciep);
                     // this.setReciep(reciep);
-                    this.$router.push('/home').catch(()=>{});;
+                    this.$router.push('/home').catch(() => {});;
 
                }
           }
-     }
-}
+          }
+          }
 </script>
 
 <style scoped>
@@ -150,6 +151,21 @@ export default {
        align-items: center;
        padding: 25px 0;
        flex-direction: column;
+  }
+  .q-btn{
+           margin-top: 50px;
+  }
+  .clarification{
+     display: block;
+    margin: 0;
+    margin-bottom: -10px;
+    color: #000;
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+  .gred{
+       background: rgba(0,0,0,0.05);
+       border-radius: 4px 4px 0 0;
   }
   form{
        max-width: 650px;
